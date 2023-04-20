@@ -18,6 +18,9 @@ https://8weeksqlchallenge.com/case-study-1/
 
 ![image](https://user-images.githubusercontent.com/130705459/232967453-3cf780dc-3357-46df-9b2d-fa73ad576ce2.png)
 
+### Case Study Questions:
+https://github.com/danielwongg/8-Week-SQL-Challenge/tree/main/Case%20Study%20%231%20-%20Danny's%20Diner
+
 ### Solution:
 https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md
 

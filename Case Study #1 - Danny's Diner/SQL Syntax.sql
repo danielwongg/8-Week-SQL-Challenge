@@ -74,13 +74,13 @@ GROUP BY customer_id;
 --Question 3
 WITH order_ranked AS
 (
-	SELECT customer_id, order_date, product_name,
-	DENSE_RANK() OVER(PARTITION BY sales.customer_id
+    SELECT customer_id, order_date, product_name,
+    DENSE_RANK() OVER(PARTITION BY sales.customer_id
     ORDER BY sales.order_date)
-	AS ranking
-	FROM sales
-	JOIN menu
-  	ON sales.product_id=menu.product_id
+    AS ranking
+    FROM sales
+    JOIN menu
+    ON sales.product_id=menu.product_id
 )
 
 SELECT customer_id, product_name
@@ -119,7 +119,7 @@ WHERE ranking = 1;
 --Question 6
 WITH date_rank AS
 (
-	SELECT sales.customer_id, order_date, join_date, product_name,
+    SELECT sales.customer_id, order_date, join_date, product_name,
     ROW_NUMBER() OVER(PARTITION BY sales.customer_id
     ORDER BY order_date)
     AS ranking
@@ -127,7 +127,7 @@ WITH date_rank AS
     JOIN members
     ON sales.customer_id=members.customer_id
     JOIN menu
-	ON sales.product_id=menu.product_id
+    ON sales.product_id=menu.product_id
     WHERE order_date>=join_date
 )
 
@@ -140,7 +140,7 @@ ORDER BY customer_id;
 --Question 7
 WITH date_rank AS
 (
-	SELECT sales.customer_id, order_date, join_date, product_name,
+    SELECT sales.customer_id, order_date, join_date, product_name,
     DENSE_RANK() OVER(PARTITION BY sales.customer_id
     ORDER BY order_date DESC)
     AS ranking
@@ -148,7 +148,7 @@ WITH date_rank AS
     JOIN members
     ON sales.customer_id=members.customer_id
     JOIN menu
-	ON sales.product_id=menu.product_id
+    ON sales.product_id=menu.product_id
     WHERE order_date<join_date
 )
 
@@ -217,18 +217,18 @@ ORDER BY sales.customer_id , order_date , product_name;
 --Bonus Question 2
 WITH ranks_cte AS
 (
-	SELECT sales.customer_id, order_date, product_name, price,
-	CASE
-	WHEN order_date < join_date THEN 'N'
-	WHEN join_date IS NULL THEN 'N'
-	ELSE 'Y'
-	END AS member
-	from sales
-	LEFT JOIN members
-	ON sales.customer_id = members.customer_id
-	JOIN menu
-	ON sales.product_id = menu.product_id
-	ORDER BY sales.customer_id , order_date , product_name
+    SELECT sales.customer_id, order_date, product_name, price,
+    CASE
+    WHEN order_date < join_date THEN 'N'
+    WHEN join_date IS NULL THEN 'N'
+    ELSE 'Y'
+    END AS member
+    from sales
+    LEFT JOIN members
+    ON sales.customer_id = members.customer_id
+    JOIN menu
+    ON sales.product_id = menu.product_id
+    ORDER BY sales.customer_id , order_date , product_name
 )
 
 SELECT *,

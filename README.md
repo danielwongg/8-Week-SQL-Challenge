@@ -11,21 +11,20 @@ Solutions for 8 case studies using data and problems from https://8weeksqlchalle
 ### Objective:
 Use data to answer questions about customers, such as money spent, popular products, and frequency of visits.
   
-### Case Study Link:
-https://8weeksqlchallenge.com/case-study-1/
+#### [Case Study Link](https://8weeksqlchallenge.com/case-study-1/)
+
 
 ### Entity Relationship Diagram:
 
 ![image](https://user-images.githubusercontent.com/130705459/232967453-3cf780dc-3357-46df-9b2d-fa73ad576ce2.png)
 
-### Case Study Questions:
-https://github.com/danielwongg/8-Week-SQL-Challenge/tree/main/Case%20Study%20%231%20-%20Danny's%20Diner
 
-### Solution:
-https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md
+#### [Case Study Questions](https://github.com/danielwongg/8-Week-SQL-Challenge/tree/main/Case%20Study%20%231%20-%20Danny's%20Diner)
 
-### SQL Syntax:
-https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/SQL%20Syntax.sql
+#### [Solution](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md)
+
+#### [SQL Syntax](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/SQL%20Syntax.sql)
+
 
 </details>
 

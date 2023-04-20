@@ -55,13 +55,13 @@ From the query above we see that customer A visited 4 times, customer B visited 
 ````sql
 WITH order_ranked AS
 (
-	SELECT customer_id, order_date, product_name,
-	DENSE_RANK() OVER(PARTITION BY sales.customer_id
-	ORDER BY sales.order_date)
-	AS ranking
-	FROM sales
-	JOIN menu
-  	ON sales.product_id=menu.product_id
+   SELECT customer_id, order_date, product_name,
+   DENSE_RANK() OVER(PARTITION BY sales.customer_id
+   ORDER BY sales.order_date)
+   AS ranking
+   FROM sales
+   JOIN menu
+   ON sales.product_id=menu.product_id
 )
 
 SELECT customer_id, product_name

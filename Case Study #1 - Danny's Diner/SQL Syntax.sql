@@ -1,4 +1,4 @@
-
+--Schema/Database Creation
 CREATE TABLE sales (
   customer_id VARCHAR(1),
   order_date DATE,
@@ -51,9 +51,8 @@ VALUES
   ('B', '2021-01-09');
   
 
-***
 
-
+--Question 1
 SELECT sales.customer_id, SUM(price) AS total_sales
 FROM sales
 JOIN menu
@@ -62,11 +61,13 @@ GROUP BY customer_id
 ORDER BY customer_id;
 
 
+--Question 2
 SELECT sales.customer_id, COUNT(DISTINCT(order_date)) as times_visited
 FROM sales
 GROUP BY customer_id;
 
 
+--Question 3
 WITH order_ranked AS
 (
 	SELECT customer_id, order_date, product_name,
@@ -84,6 +85,7 @@ WHERE ranking = 1
 GROUP BY customer_id, product_name;
 
 
+--Question 4
 SELECT product_name, COUNT(sales.product_id) AS times_ordered
 FROM sales
 JOIN menu
@@ -92,6 +94,7 @@ GROUP BY sales.product_id, product_name
 ORDER BY COUNT(sales.product_id) DESC;
 
 
+--Question 5
 WITH most_ordered AS
 (
     SELECT sales.customer_id, product_name, COUNT(sales.product_id) AS times_ordered,
@@ -109,6 +112,7 @@ FROM most_ordered
 WHERE ranking = 1;
 
 
+--Question 6
 WITH date_rank AS
 (
 	SELECT sales.customer_id, order_date, join_date, product_name,
@@ -129,6 +133,7 @@ WHERE ranking = 1
 ORDER BY customer_id;
 
 
+--Question 7
 WITH date_rank AS
 (
 	SELECT sales.customer_id, order_date, join_date, product_name,
@@ -148,6 +153,7 @@ FROM date_rank
 WHERE ranking = 1;
 
 
+--Question 8
 SELECT sales.customer_id, COUNT(product_name) AS total_items, SUM(price) AS total_spent
 FROM sales
 JOIN menu
@@ -159,6 +165,7 @@ GROUP BY sales.customer_id
 ORDER BY sales.customer_id;
 
 
+--Question 9
 SELECT sales.customer_id,
 SUM(CASE
 WHEN product_name = 'sushi' THEN price * 20
@@ -170,6 +177,7 @@ ON sales.product_id=menu.product_id
 GROUP BY sales.customer_id;
 
 
+--Question 10
 SELECT sales.customer_id,
 SUM(CASE
 WHEN product_name = 'sushi' THEN price * 20
@@ -186,9 +194,8 @@ GROUP BY sales.customer_id
 ORDER BY sales.customer_id;
 
 
-***
 
-
+--Bonus Question 1
 SELECT sales.customer_id, order_date, product_name, price,
 CASE
 WHEN order_date < join_date THEN 'N'
@@ -203,6 +210,7 @@ ON sales.product_id = menu.product_id
 ORDER BY sales.customer_id , order_date , product_name;
 
 
+--Bonus Question 2
 WITH ranks_cte AS
 (
 	SELECT sales.customer_id, order_date, product_name, price,
@@ -227,10 +235,5 @@ DENSE_RANK() OVER(PARTITION BY sales.customer_id, member
 ORDER BY order_date)
 END AS ranking
 FROM ranks_cte;
-
-
-
-***
-
 
 

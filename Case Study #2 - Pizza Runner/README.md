@@ -25,6 +25,8 @@ Clean and transform existing data, as well as use data to answer questions such 
 9. What was the total volume of pizzas ordered for each hour of the day?
 10. What was the volume of orders for each day of the week?
 
+***
+
 ### B. Runner and Customer Experience
 
 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
@@ -34,6 +36,8 @@ Clean and transform existing data, as well as use data to answer questions such 
 5. What was the difference between the longest and shortest delivery times for all orders?
 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
 7. What is the successful delivery percentage for each runner?
+
+***
 
 ### C. Ingredient Optimisation
 
@@ -48,6 +52,8 @@ Clean and transform existing data, as well as use data to answer questions such 
 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
 6. For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
 7. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+
+***
 
 ### D. Pricing and Ratings
 
@@ -67,6 +73,8 @@ Clean and transform existing data, as well as use data to answer questions such 
 - Average speed
 - Total number of pizzas
 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+
+***
 
 ### E. Bonus Questions
 

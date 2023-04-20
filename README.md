@@ -18,7 +18,7 @@ Use data to answer questions about customers, such as money spent, popular produ
 ## Case Study #2 - Pizza Runner
 
 ### Objective:
-Clean existing data, as well as use data to answer questions such as pizza metrics, runner and customer experience, ingredient optimization, and pricings and ratings.
+Clean and transform existing data, as well as use data to answer questions such as pizza metrics, runner and customer experience, ingredient optimization, and pricings and ratings.
 
 
 ### Entity Relationship Diagram:

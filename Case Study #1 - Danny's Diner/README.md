@@ -24,5 +24,6 @@ Use data to answer questions about customers, such as money spent, popular produ
 
 ### Solutions & Syntax:
 Solutions can be found [here](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md)
+
 SQL Syntax can be found [here](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/SQL%20Syntax.sql)
 

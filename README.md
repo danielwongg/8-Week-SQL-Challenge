@@ -1,5 +1,5 @@
 # 8-Week-SQL-Challenge
-Solutions for case studies using data from https://8weeksqlchallenge.com/
+Solutions for 8 case studies using data and problems from https://8weeksqlchallenge.com/
 
 ***
 

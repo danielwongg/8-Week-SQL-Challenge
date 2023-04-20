@@ -1,26 +1,77 @@
-```sql
+
+CREATE TABLE sales (
+  customer_id VARCHAR(1),
+  order_date DATE,
+  product_id INTEGER
+);
+
+INSERT INTO sales
+  (customer_id, order_date, product_id)
+VALUES
+  ('A', '2021-01-01', '1'),
+  ('A', '2021-01-01', '2'),
+  ('A', '2021-01-07', '2'),
+  ('A', '2021-01-10', '3'),
+  ('A', '2021-01-11', '3'),
+  ('A', '2021-01-11', '3'),
+  ('B', '2021-01-01', '2'),
+  ('B', '2021-01-02', '2'),
+  ('B', '2021-01-04', '1'),
+  ('B', '2021-01-11', '1'),
+  ('B', '2021-01-16', '3'),
+  ('B', '2021-02-01', '3'),
+  ('C', '2021-01-01', '3'),
+  ('C', '2021-01-01', '3'),
+  ('C', '2021-01-07', '3');
+ 
+
+CREATE TABLE menu (
+  product_id INTEGER,
+  product_name VARCHAR(5),
+  price INTEGER
+);
+
+INSERT INTO menu
+  (product_id, product_name, price)
+VALUES
+  ('1', 'sushi', '10'),
+  ('2', 'curry', '15'),
+  ('3', 'ramen', '12');
+  
+
+CREATE TABLE members (
+  customer_id VARCHAR(1),
+  join_date DATE
+);
+
+INSERT INTO members
+  (customer_id, join_date)
+VALUES
+  ('A', '2021-01-07'),
+  ('B', '2021-01-09');
+  
+
+***
+
+
 SELECT sales.customer_id, SUM(price) AS total_sales
 FROM sales
 JOIN menu
 ON sales.product_id=menu.product_id
 GROUP BY customer_id
 ORDER BY customer_id;
-```
 
 
-```sql
-SELECT sales.customer_id, COUNT(DISTINCT(order_date)) AS times_visited
+SELECT sales.customer_id, COUNT(DISTINCT(order_date)) as times_visited
 FROM sales
 GROUP BY customer_id;
-```
 
 
-````sql
 WITH order_ranked AS
 (
 	SELECT customer_id, order_date, product_name,
 	DENSE_RANK() OVER(PARTITION BY sales.customer_id
-	ORDER BY sales.order_date)
+    ORDER BY sales.order_date)
 	AS ranking
 	FROM sales
 	JOIN menu
@@ -31,20 +82,16 @@ SELECT customer_id, product_name
 FROM order_ranked
 WHERE ranking = 1
 GROUP BY customer_id, product_name;
-````
 
 
-````sql
 SELECT product_name, COUNT(sales.product_id) AS times_ordered
 FROM sales
 JOIN menu
 ON sales.product_id=menu.product_id
 GROUP BY sales.product_id, product_name
 ORDER BY COUNT(sales.product_id) DESC;
-````
 
 
-````sql
 WITH most_ordered AS
 (
     SELECT sales.customer_id, product_name, COUNT(sales.product_id) AS times_ordered,
@@ -57,16 +104,14 @@ WITH most_ordered AS
     GROUP BY sales.customer_id, menu.product_name
 )
 
-SELECT customer_id, product_name, TimesOrdered
+SELECT customer_id, product_name, times_ordered
 FROM most_ordered
 WHERE ranking = 1;
-````
 
 
-````sql
 WITH date_rank AS
 (
-    SELECT sales.customer_id, order_date, sales.product_id, join_date, product_name,
+	SELECT sales.customer_id, order_date, join_date, product_name,
     ROW_NUMBER() OVER(PARTITION BY sales.customer_id
     ORDER BY order_date)
     AS ranking
@@ -74,7 +119,7 @@ WITH date_rank AS
     JOIN members
     ON sales.customer_id=members.customer_id
     JOIN menu
-    ON sales.product_id=menu.product_id
+	ON sales.product_id=menu.product_id
     WHERE order_date>=join_date
 )
 
@@ -82,13 +127,11 @@ SELECT customer_id, product_name, order_date
 FROM date_rank
 WHERE ranking = 1
 ORDER BY customer_id;
-````
 
 
-````sql
 WITH date_rank AS
 (
-    SELECT sales.customer_id, order_date, join_date, product_name,
+	SELECT sales.customer_id, order_date, join_date, product_name,
     DENSE_RANK() OVER(PARTITION BY sales.customer_id
     ORDER BY order_date DESC)
     AS ranking
@@ -96,30 +139,26 @@ WITH date_rank AS
     JOIN members
     ON sales.customer_id=members.customer_id
     JOIN menu
-    ON sales.product_id=menu.product_id
+	ON sales.product_id=menu.product_id
     WHERE order_date<join_date
 )
 
 SELECT customer_id, product_name, order_date, join_date
 FROM date_rank
 WHERE ranking = 1;
-````
 
 
-````sql
 SELECT sales.customer_id, COUNT(product_name) AS total_items, SUM(price) AS total_spent
 FROM sales
 JOIN menu
-ON menu.product_id=sales.product_id
+ON menu.product_id = sales.product_id
 JOIN members
-ON members.customer_id=sales.customer_id
-WHERE order_date<join_date
+ON members.customer_id = sales.customer_id
+WHERE order_date < join_date
 GROUP BY sales.customer_id
 ORDER BY sales.customer_id;
-````
 
 
-````sql
 SELECT sales.customer_id,
 SUM(CASE
 WHEN product_name = 'sushi' THEN price * 20
@@ -129,10 +168,8 @@ FROM menu
 JOIN sales
 ON sales.product_id=menu.product_id
 GROUP BY sales.customer_id;
-````
 
 
-````sql
 SELECT sales.customer_id,
 SUM(CASE
 WHEN product_name = 'sushi' THEN price * 20
@@ -147,13 +184,11 @@ ON sales.customer_id=members.customer_id
 WHERE order_date<=LAST_DAY('2021-01-01')
 GROUP BY sales.customer_id
 ORDER BY sales.customer_id;
-````
 
 
 ***
 
 
-````sql
 SELECT sales.customer_id, order_date, product_name, price,
 CASE
 WHEN order_date < join_date THEN 'N'
@@ -166,24 +201,22 @@ ON sales.customer_id = members.customer_id
 JOIN menu
 ON sales.product_id = menu.product_id
 ORDER BY sales.customer_id , order_date , product_name;
- ````
 
 
-````sql
 WITH ranks_cte AS
 (
-    SELECT sales.customer_id, order_date, product_name, price,
-    CASE
-    WHEN order_date < join_date THEN 'N'
-    WHEN join_date IS NULL THEN 'N'
-    ELSE 'Y'
-    END AS member
-    from sales
-    LEFT JOIN members
-    ON sales.customer_id = members.customer_id
-    JOIN menu
-    ON sales.product_id = menu.product_id
-    ORDER BY sales.customer_id , order_date , product_name
+	SELECT sales.customer_id, order_date, product_name, price,
+	CASE
+	WHEN order_date < join_date THEN 'N'
+	WHEN join_date IS NULL THEN 'N'
+	ELSE 'Y'
+	END AS member
+	from sales
+	LEFT JOIN members
+	ON sales.customer_id = members.customer_id
+	JOIN menu
+	ON sales.product_id = menu.product_id
+	ORDER BY sales.customer_id , order_date , product_name
 )
 
 SELECT *,
@@ -194,7 +227,7 @@ DENSE_RANK() OVER(PARTITION BY sales.customer_id, member
 ORDER BY order_date)
 END AS ranking
 FROM ranks_cte;
-````
+
 
 
 ***

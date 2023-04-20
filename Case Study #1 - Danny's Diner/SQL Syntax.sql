@@ -1,3 +1,7 @@
+--Case Study #1 - Danny's Diner
+
+
+
 --Schema/Database Creation
 CREATE TABLE sales (
   customer_id VARCHAR(1),

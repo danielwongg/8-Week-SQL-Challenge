@@ -1,2 +1,7 @@
 # 8-Week-SQL-Challenge
-Case Studies using data from https://8weeksqlchallenge.com/
+Solutions for case studies using data from https://8weeksqlchallenge.com/
+
+***
+
+## Case Study #1 - Danny's Diner
+*

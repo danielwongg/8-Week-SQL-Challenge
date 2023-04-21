@@ -65,7 +65,9 @@ In order to clean the date into a workable state:
 CREATE TEMPORARY TABLE temp_runner_orders AS
 SELECT order_id, runner_id,
 CASE
-WHEN pickup_time IS NULL OR pickup_time LIKE 'null' THEN NULL
+WHEN pickup_time IS NULL THEN NULL
+WHEN pickup_time like '' THEN NULL
+WHEN pickup_time LIKE 'null' THEN NULL
 ELSE pickup_time
 END AS pickup_time,
 CASE

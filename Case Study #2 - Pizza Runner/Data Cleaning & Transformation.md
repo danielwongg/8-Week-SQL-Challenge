@@ -24,11 +24,15 @@ In order to clean the date into a workable state:
 CREATE TEMPORARY TABLE temp_customer_orders AS
 SELECT order_id, customer_id, pizza_id,
 CASE
-WHEN exclusions IS NULL OR exclusions LIKE 'null' THEN ' '
+WHEN exclusions LIKE 'null' THEN NULL
+WHEN exclusions IS NULL THEN NULL
+WHEN exclusions LIKE '' THEN NULL
 ELSE exclusions
 END AS exclusions,
 CASE
-WHEN extras IS NULL OR extras LIKE 'null' THEN ' '
+WHEN extras IS NULL THEN NULL
+WHEN extras LIKE 'null' THEN NULL
+WHEN extras LIKE '' THEN NULL 
 ELSE extras
 END AS extras,
 order_time
@@ -37,7 +41,7 @@ FROM customer_orders;
 
 With the query above, this new ```temp_customer_orders``` table will be used instead of the ```customer_orders``` table to perform additional queries.
 
-![image](https://user-images.githubusercontent.com/130705459/233499818-ddbe882f-8991-48bb-9c42-917997acf4c1.png)
+![image](https://user-images.githubusercontent.com/130705459/233533654-738d3672-7866-4fec-8071-32e27411139a.png)
 
 
 ***
@@ -61,26 +65,26 @@ In order to clean the date into a workable state:
 CREATE TEMPORARY TABLE temp_runner_orders AS
 SELECT order_id, runner_id,
 CASE
-WHEN pickup_time IS NULL OR pickup_time LIKE 'null' THEN ' '
+WHEN pickup_time IS NULL OR pickup_time LIKE 'null' THEN NULL
 ELSE pickup_time
 END AS pickup_time,
 CASE
-WHEN distance IS NULL THEN ' '
-WHEN distance LIKE 'null' THEN ' '
+WHEN distance IS NULL THEN NULL
+WHEN distance LIKE 'null' THEN NULL
 WHEN distance LIKE '%km' THEN trim('km' FROM distance)
 ELSE distance
 END AS distance_km,
 CASE
-WHEN duration IS NULL THEN ' '
-WHEN duration LIKE 'null' THEN ' '
+WHEN duration IS NULL THEN NULL
+WHEN duration LIKE 'null' THEN NULL
 WHEN duration LIKE '%minutes' THEN trim('minutes' FROM duration)
 WHEN duration LIKE '%minute' THEN trim('minute' FROM duration)
 WHEN duration LIKE '%mins' THEN trim('mins' FROM duration)
 ELSE duration
 END AS duration_minutes,
 CASE
-WHEN cancellation IS NULL THEN ' '
-WHEN cancellation LIKE 'null' THEN ' '
+WHEN cancellation LIKE '' THEN NULL
+WHEN cancellation LIKE 'null' THEN NULL
 ELSE cancellation
 END AS cancellation
 FROM runner_orders;
@@ -89,16 +93,16 @@ FROM runner_orders;
 Then, we alter the `pickup_time`, `distance` and `duration` columns to the correct data type.
 
 ````sql
-ALTER TABLE runner_orders_temp
-ALTER COLUMN pickup_time DATETIME,
-ALTER COLUMN distance FLOAT,
-ALTER COLUMN duration INT;
+ALTER TABLE temp_runner_orders
+MODIFY COLUMN pickup_time DATETIME,
+MODIFY COLUMN distance_km FLOAT,
+MODIFY COLUMN duration_minutes INT;
 ````
 
-This is how the clean `runner_orders_temp` table looks like and we will use this table to run all our queries.
+With the query above, this new ```temp_rnner_orders``` table will be used instead of the ```runner_orders``` table to perform additional queries withing this case study.
 
-![image](https://user-images.githubusercontent.com/130705459/233532302-3de21b4f-1e88-453a-b22b-03b6d30f39de.png)
+![image](https://user-images.githubusercontent.com/130705459/233533699-524caa7c-a8a0-4456-81d6-08a958afb793.png)
 
 ***
 
-Click here for [solution](https://github.com/katiehuangx/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/A.%20Pizza%20Metrics.md) to **A. Pizza Metrics**!
+Click here for INSERT SOLUTION LINK HERE

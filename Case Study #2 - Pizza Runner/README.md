@@ -84,4 +84,6 @@ If Danny wants to expand his range of pizzas - how would this impact the existin
 
 ### Data Cleaning and Transformations
 
-Solutions [here] INSERT LINK
+Solutions [here](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Data%20Cleaning%20%26%20Transformation.md)
+
+***

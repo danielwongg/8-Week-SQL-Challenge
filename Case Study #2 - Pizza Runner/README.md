@@ -84,6 +84,10 @@ If Danny wants to expand his range of pizzas - how would this impact the existin
 
 ### Data Cleaning and Transformations
 
+From the [case study page](https://8weeksqlchallenge.com/case-study-2/), the instructions call for the data to be cleaned:
+
+>"Before you start writing your SQL queries however - you might want to investigate the data, you may want to do something with some of those null values and data types in the customer_orders and runner_orders tables!"
+
 Solutions [here](https://github.com/danielwongg/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Data%20Cleaning%20%26%20Transformation.md)
 
 ***

@@ -6,18 +6,18 @@ From the [case study page](https://8weeksqlchallenge.com/case-study-2/), the ins
 
 >"Before you start writing your SQL queries however - you might want to investigate the data, you may want to do something with some of those null values and data types in the customer_orders and runner_orders tables!"
 
-The following demonstrates how the data will be cleaned 
+The following queries below demonstrates how the data will be cleaned:
 
 ### Table: customer_orders
 
-- Looking at the ```customer_orders``` table below, the ```exclusions``` and ```extras``` column both contain **NULL** values or text that states 'null'
+- Looking at the ```customer_orders``` table below, the ```exclusions``` and ```extras``` column both contain empty spaces or text that states 'null'
 - The data is not in a workable state as they are not uniform in nature
 
 ![image](https://user-images.githubusercontent.com/130705459/233496092-d1e12e97-af4f-4eb4-84af-bf8591f32d66.png)
 
 In order to clean the date into a workable state:
 - Create a temporary table mimicking the original ```customer_orders``` table with the projected fixes for the columns with issues
-- Remove **NULL** values and 'null' text and replace them with a empty space
+- Remove empty spaces and 'null' text and replace them with **NULL** values
 - Check that all data is the correct type(ie. date is not listed as VARCHAR), and adjust as needed for all columns
 
 ````sql
@@ -48,15 +48,15 @@ With the query above, this new ```temp_customer_orders``` table will be used ins
 
 ### Table: runner_orders
 
-- Looking at the `runner_orders` table below, the ```pivkup_time```, ```distance```, ```duration```, and ```cancellation``` columns are not uniformally formatted
-- The columns contain **NULL** values, and differing text chains
+- Looking at the `runner_orders` table below, the ```pickup_time```, ```distance```, ```duration```, and ```cancellation``` columns are not uniformally formatted
+- The columns contain empty spaces and differing text chains that make it difficult to use in a query
 
 
 ![image](https://user-images.githubusercontent.com/130705459/233526017-45dd5a25-6b54-4cd0-b15e-ff1dcec246d6.png)
 
 In order to clean the date into a workable state:
 - Create a temporary table mimicking the original ```runner_orders``` table with the projected fixes for the columns with issues
-- Remove **NULL** values and 'null' text and replace them with a empty space
+- Remove empty spaces and 'null' text and replace them with **NULL** values
 - Use a **TRIM** function along with multiple **CASE** statements to make all text/units of measurement uniform
 - Repeat as necessary for each respective column that requires cleaning
 - Check that all data is the correct type(ie. date is not listed as VARCHAR), and adjust as needed for all columns
@@ -90,7 +90,7 @@ END AS cancellation
 FROM runner_orders;
 ````
 
-Then, we alter the `pickup_time`, `distance` and `duration` columns to the correct data type.
+After adjusting the columns to be uniformally formatted, an **ALTER TABLE** and **MODIFY COLUMN** command is used to change the data types within the temporary table, as ```pickup_time```, ```distance```, and ```duration``` were all set as **VARCHAR** in the original ```runner_orders``` table instead of the proper data types.
 
 ````sql
 ALTER TABLE temp_runner_orders
@@ -99,7 +99,7 @@ MODIFY COLUMN distance_km FLOAT,
 MODIFY COLUMN duration_minutes INT;
 ````
 
-With the query above, this new ```temp_rnner_orders``` table will be used instead of the ```runner_orders``` table to perform additional queries withing this case study.
+With the query above, this new ```temp_runner_orders``` table will be used instead of the ```runner_orders``` table to perform additional queries withing this case study.
 
 ![image](https://user-images.githubusercontent.com/130705459/233533699-524caa7c-a8a0-4456-81d6-08a958afb793.png)
 

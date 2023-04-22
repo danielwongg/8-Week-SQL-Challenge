@@ -7,145 +7,169 @@
 ### 1. How many pizzas were ordered?
 
 ````sql
-SELECT COUNT(order_id) AS pizzas_ordered FROM temp_customer_orders;
+SELECT COUNT(order_id) AS pizzas_ordered
+FROM temp_customer_orders;
 ````
-Reasoning
+#### Reasoning
+-  Each row from the ```temp_customer_orders``` table corresponds to one pizza as stated in the case study
+-  Use a **COUNT** function to count the number of rows, in this csae ```order_id``` was used
 
-![image](https://user-images.githubusercontent.com/130705459/233735090-8bbc4af8-1f3f-49cb-8153-c1e0242f90ca.png)
+#### Answer:
+
+![image](https://user-images.githubusercontent.com/130705459/233735953-9ab125be-c447-4d2f-bc66-2fd591e47be1.png)
 
 From the query above, there have been 14 pizzas ordered.
 
 ### 2. How many unique customer orders were made?
 
 ````sql
-SELECT 
-  COUNT(DISTINCT order_id) AS unique_order_count
-FROM #customer_orders;
+SELECT COUNT(DISTINCT(order_id)) AS orders_made
+FROM temp_customer_orders;
 ````
 
-**Answer:**
+#### Reasoning
+-  Similar to the previous question, a **COUNT** function is used on ```order_id```, but this time together with a **DISTINCT** function as we wish to find each unique order ID
 
-![image](https://user-images.githubusercontent.com/81607668/129737993-710198bd-433d-469f-b5de-14e4022a3a45.png)
+#### Answer:
 
-- There are 10 unique customer orders.
+![image](https://user-images.githubusercontent.com/130705459/233735978-f289bdbe-4152-4b3c-b049-a08c27c108ba.png)
+
+From the query above there have been 10 unique orders made.
 
 ### 3. How many successful orders were delivered by each runner?
 
 ````sql
-SELECT 
-  runner_id, 
-  COUNT(order_id) AS successful_orders
-FROM #runner_orders
-WHERE distance != 0
+SELECT runner_id, COUNT(pickup_time) AS orders_delivered
+FROM temp_runner_orders
+WHERE pickup_time IS NOT NULL
 GROUP BY runner_id;
 ````
 
-**Answer:**
+#### Reasoning
+- A **COUNT** function with a **WHERE** clause that states that ```pickup_time``` cannot be **NULL** counts the numbers of orders that have been picked up and delivered by runners
+- Results are then ordered with a **GROUP BY** command with ```runner_id``` to discern how many successful pickups and deliveries were made by each runner
 
-![image](https://user-images.githubusercontent.com/81607668/129738112-6eada46a-8c32-495a-8e26-793b2fec89ef.png)
+#### Answer:
 
-- Runner 1 has 4 successful delivered orders.
-- Runner 2 has 3 successful delivered orders.
-- Runner 3 has 1 successful delivered order.
+![image](https://user-images.githubusercontent.com/130705459/233737261-1fc65233-2edb-4726-a0f9-770297cad431.png)
+
+From the query above, runner 1 made 4 deliveries, runner 2 made 3 deliveries, and runner 3 made 1 delivery.
 
 ### 4. How many of each type of pizza was delivered?
 
 ````sql
-SELECT 
-  p.pizza_name, 
-  COUNT(c.pizza_id) AS delivered_pizza_count
-FROM #customer_orders AS c
-JOIN #runner_orders AS r
-  ON c.order_id = r.order_id
-JOIN pizza_names AS p
-  ON c.pizza_id = p.pizza_id
-WHERE r.distance != 0
-GROUP BY p.pizza_name;
+SELECT pizza_name, COUNT(temp_customer_orders.pizza_id) AS pizza_count
+FROM temp_customer_orders
+JOIN temp_runner_orders
+ON temp_runner_orders.order_id=temp_customer_orders.order_id
+JOIN pizza_names
+ON temp_customer_orders.pizza_id=pizza_names.pizza_id
+WHERE pickup_time IS NOT NULL
+GROUP BY pizza_name;
 ````
 
-**Answer:**
+#### Reasoning
+- Two **JOIN** functions must be used to join the ```temp_runner_orders``` and ```pizza_names``` tables to the ```temp_customer_orders``` table
+- A **COUNT** function on the ```pizza_id``` column is used with a **GROUP BY** on ```pizza_name``` to count the number of pizzas successfully delivered based on the pizza name
+- Ensure to only count successful deliveries with a **WHERE** clause that only counts if ```pickup_time``` is not **NULL**
 
-![image](https://user-images.githubusercontent.com/81607668/129738140-c9c002ff-5aed-48ab-bdfa-cadbd98973a9.png)
+#### Answer:
 
-- There are 9 delivered Meatlovers pizzas and 3 Vegetarian pizzas.
+![image](https://user-images.githubusercontent.com/130705459/233739325-82a5ff0e-6e6a-4565-a5b1-1b0836d26c10.png)
+
+From the query above, Meat Lovers pizza was delivered 9 times, and Vegetarian pizza was delivered 3 times.
 
 ### 5. How many Vegetarian and Meatlovers were ordered by each customer?**
 
 ````sql
-SELECT 
-  c.customer_id, 
-  p.pizza_name, 
-  COUNT(p.pizza_name) AS order_count
-FROM #customer_orders AS c
-JOIN pizza_names AS p
-  ON c.pizza_id= p.pizza_id
-GROUP BY c.customer_id, p.pizza_name
-ORDER BY c.customer_id;
+SELECT customer_id, pizza_name, COUNT(temp_customer_orders.pizza_id) AS pizza_count
+FROM temp_customer_orders
+JOIN temp_runner_orders
+ON temp_runner_orders.order_id=temp_customer_orders.order_id
+JOIN pizza_names
+ON temp_customer_orders.pizza_id=pizza_names.pizza_id
+GROUP BY customer_id, pizza_name
+ORDER BY customer_id;
 ````
 
-**Answer:**
+#### Reasoning
+- Use the same query as the previous question, but inserting ```customer_id``` into the **SELECT**, **GROUP BY**, and **ORDER BY** functions
+- Eliminate the **WHERE** clause as the orders do not need to be delivered, only ordered
 
-![image](https://user-images.githubusercontent.com/81607668/129738167-269df165-1c9a-446a-b757-c7fc9a9021ed.png)
+#### Answer:
 
-- Customer 101 ordered 2 Meatlovers pizzas and 1 Vegetarian pizza.
-- Customer 102 ordered 2 Meatlovers pizzas and 2 Vegetarian pizzas.
-- Customer 103 ordered 3 Meatlovers pizzas and 1 Vegetarian pizza.
-- Customer 104 ordered 1 Meatlovers pizza.
-- Customer 105 ordered 1 Vegetarian pizza.
+![image](https://user-images.githubusercontent.com/130705459/233739978-908055de-d971-48d7-9480-5a2d1c00ff33.png)
+
+From the query above:
+- Customer 101 made 2 Meat Lovers and 1 Vegetarian orders
+- Customer 102 made 2 Meat Lovers and 1 Vegetarian orders
+- Customer 103 made 3 Meat Lovers and 1 Vegetarian orders
+- Customer 104 made 3 Meat Lovers orders
+- Customer 105 made 1 Vegetarian order
 
 ### 6. What was the maximum number of pizzas delivered in a single order?
 
 ````sql
-WITH pizza_count_cte AS
+WITH most_ordered_cte AS
 (
-  SELECT 
-    c.order_id, 
-    COUNT(c.pizza_id) AS pizza_per_order
-  FROM #customer_orders AS c
-  JOIN #runner_orders AS r
-    ON c.order_id = r.order_id
-  WHERE r.distance != 0
-  GROUP BY c.order_id
+	SELECT temp_customer_orders.order_id, COUNT(temp_customer_orders.pizza_id) AS pizza_count
+	FROM temp_customer_orders
+	JOIN temp_runner_orders
+	ON temp_runner_orders.order_id=temp_customer_orders.order_id
+	WHERE pickup_time IS NOT NULL
+	GROUP BY temp_customer_orders.order_id
 )
 
-SELECT 
-  MAX(pizza_per_order) AS pizza_count
-FROM pizza_count_cte;
+SELECT MAX(pizza_count) AS largest_order
+FROM most_ordered_cte;
 ````
 
-**Answer:**
+#### Reasoning
+- Use the same query as question #4 but replace ```pizza_name``` with ```order_id``` and eliminate the **JOIN** of the ```pizza_names``` table, this change counts the number of pizzas per order
+- Ensure to only count successful deliveries with a **WHERE** clause that only counts if ```pickup_time``` is not **NULL**
+- Insert that query into a CTE, and use a **MAX** function on ```pizza_count``` to find the largest number of pizzas in a single order in another **SELECT** statement
 
-![image](https://user-images.githubusercontent.com/81607668/129738201-f676edd4-2530-4663-9ed8-6e6ec4d9cc68.png)
+#### Answer:
 
-- Maximum number of pizza delivered in a single order is 3 pizzas.
+![image](https://user-images.githubusercontent.com/130705459/233741588-ec4e4a8a-5509-4e35-b358-3adb84eaa431.png)
+
+From the query above the largest number of pizzas delivered in a single order is 3.
 
 ### 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
 ````sql
-SELECT 
-  c.customer_id,
-  SUM(
-    CASE WHEN c.exclusions <> ' ' OR c.extras <> ' ' THEN 1
-    ELSE 0
-    END) AS at_least_1_change,
-  SUM(
-    CASE WHEN c.exclusions = ' ' AND c.extras = ' ' THEN 1 
-    ELSE 0
-    END) AS no_change
-FROM #customer_orders AS c
-JOIN #runner_orders AS r
-  ON c.order_id = r.order_id
-WHERE r.distance != 0
-GROUP BY c.customer_id
-ORDER BY c.customer_id;
+SELECT temp_customer_orders.customer_id,
+SUM(CASE
+WHEN exclusions IS NOT NULL OR extras IS NOT NULL THEN '1'
+ELSE '0'
+END) AS changes,
+SUM(CASE
+WHEN exclusions IS NOT NULL OR extras IS NOT NULL THEN '0'
+ELSE '1'
+END) AS no_changes
+FROM temp_customer_orders
+JOIN temp_runner_orders
+ON temp_runner_orders.order_id = temp_customer_orders.order_id
+WHERE pickup_time IS NOT NULL
+GROUP BY temp_customer_orders.customer_id;
 ````
 
-**Answer:**
+#### Reasoning
+- Need to fined number of orders delivered, so we can use the same query as question #4 but replace ```pizza_name``` with ```order_id``` and eliminate the **JOIN** of the ```pizza_names``` table
+- There is no **COUNT IF** function that exists, so to workaround this we use two different **SUM** functions with **CASE** statements within each one
+- To see how many pizzas were changed, use an **OR** function within the **CASE** statement to check if ```exclusions``` or ```extras``` is not null, if so the result is = 1, otherwise result = 0. This way when we **SUM**, if either ```exclusions``` or ```extras``` returns a value it is counted as one pizza with changes made towards the **SUM**
+- The reverse is done for the **SUM** for no changes; if ```exclusions``` or ```extras``` is not null, then the value returned = 0, otherwise value = 1. This way when we **SUM**, only pizzas that have null values in ```exclusions``` or ```extras```will have value = 1
 
-![image](https://user-images.githubusercontent.com/81607668/129738236-2c4383cb-9d42-458c-b9be-9963c336ee58.png)
+#### Answer:
 
-- Customer 101 and 102 likes his/her pizzas per the original recipe.
-- Customer 103, 104 and 105 have their own preference for pizza topping and requested at least 1 change (extra or exclusion topping) on their pizza.
+![image](https://user-images.githubusercontent.com/130705459/233753776-8fba311b-5b7f-4320-a797-49421f21d1dc.png)
+
+From the query above:
+- Customer 101 ordered 2 pizzas with no changes
+- Customer 102 ordered 3 pizzas with no changes
+- Customer 103 ordered 3 pizzas with at least one change
+- Customer 104 ordered 1 pizza with no changes and 2 pizzas with at least one change
+- Customer 105 ordered 1 pizza with at least one change
 
 ### 8. How many pizzas were delivered that had both exclusions and extras?
 

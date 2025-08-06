@@ -156,7 +156,7 @@ GROUP BY temp_customer_orders.customer_id;
 
 #### Reasoning
 - Need to fined number of orders delivered, so we can use the same query as question #4 but replace ```pizza_name``` with ```order_id``` and eliminate the **JOIN** of the ```pizza_names``` table
-- There is no **COUNT IF** function that exists, so to workaround this we use two different **SUM** functions with **CASE** statements within each one
+- Use two different **SUM** functions with **CASE** statements within each one
 - To see how many pizzas were changed, use an **OR** function within the **CASE** statement to check if ```exclusions``` or ```extras``` is not null, if so the result is = 1, otherwise result = 0. This way when we **SUM**, if either ```exclusions``` or ```extras``` returns a value it is counted as one pizza with changes made towards the **SUM**
 - The reverse is done for the **SUM** for no changes; if ```exclusions``` or ```extras``` is not null, then the value returned = 0, otherwise value = 1. This way when we **SUM**, only pizzas that have null values in ```exclusions``` or ```extras```will have value = 1
 
@@ -171,60 +171,4 @@ From the query above:
 - Customer 104 ordered 1 pizza with no changes and 2 pizzas with at least one change
 - Customer 105 ordered 1 pizza with at least one change
 
-### 8. How many pizzas were delivered that had both exclusions and extras?
-
-````sql
-SELECT  
-  SUM(
-    CASE WHEN exclusions IS NOT NULL AND extras IS NOT NULL THEN 1
-    ELSE 0
-    END) AS pizza_count_w_exclusions_extras
-FROM #customer_orders AS c
-JOIN #runner_orders AS r
-  ON c.order_id = r.order_id
-WHERE r.distance >= 1 
-  AND exclusions <> ' ' 
-  AND extras <> ' ';
-````
-
-**Answer:**
-
-![image](https://user-images.githubusercontent.com/81607668/129738278-dd3e7056-309d-42fc-a5e3-00f7b5d4609e.png)
-
-- Only 1 pizza delivered that had both extra and exclusion topping. That’s one fussy customer!
-
-### 9. What was the total volume of pizzas ordered for each hour of the day?
-
-````sql
-SELECT 
-  DATEPART(HOUR, [order_time]) AS hour_of_day, 
-  COUNT(order_id) AS pizza_count
-FROM #customer_orders
-GROUP BY DATEPART(HOUR, [order_time]);
-````
-
-**Answer:**
-
-![image](https://user-images.githubusercontent.com/81607668/129738302-573430e9-1785-4c71-adc1-464ffa94de8a.png)
-
-- Highest volume of pizza ordered is at 13 (1:00 pm), 18 (6:00 pm) and 21 (9:00 pm).
-- Lowest volume of pizza ordered is at 11 (11:00 am), 19 (7:00 pm) and 23 (11:00 pm).
-
-### 10. What was the volume of orders for each day of the week?
-
-````sql
-SELECT 
-  FORMAT(DATEADD(DAY, 2, order_time),'dddd') AS day_of_week, -- add 2 to adjust 1st day of the week as Monday
-  COUNT(order_id) AS total_pizzas_ordered
-FROM #customer_orders
-GROUP BY FORMAT(DATEADD(DAY, 2, order_time),'dddd');
-````
-
-**Answer:**
-
-![image](https://user-images.githubusercontent.com/81607668/129738331-233744f6-3b57-4f4f-9a51-f7a699a9eb2e.png)
-
-- There are 5 pizzas ordered on Friday and Monday.
-- There are 3 pizzas ordered on Saturday.
-- There is 1 pizza ordered on Sunday.
 

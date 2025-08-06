@@ -106,5 +106,3 @@ With the query above, this new ```temp_runner_orders``` table will be used inste
 ![image](https://user-images.githubusercontent.com/130705459/233533699-524caa7c-a8a0-4456-81d6-08a958afb793.png)
 
 ***
-
-Click here for INSERT SOLUTION LINK HERE
